@@ -1,3 +1,7 @@
+"
+I'm a point holding some data for a region quad tree. 
+Note that I could have been merged in the quad tree.
+"
 Class {
 	#name : #CTQuadPoint,
 	#superclass : #Object,
