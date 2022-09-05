@@ -44,23 +44,50 @@ CTRegionQuadTreeTest >> testEmptyTreeOfExtent [
 ]
 
 { #category : #tests }
-CTRegionQuadTreeTest >> testQuadrantOfPoint [
+CTRegionQuadTreeTest >> testHeight [
 	
-	| tree  |
-	self flag: #tofinish.
-	tree := CTRegionQuadTree new.
-	"what is the quadrant of an unsplit node? itself?"
-	tree quadrantOf: (CTQuadPoint x: 2 y: 2 object: 'Chicago').
-	self deny: tree isLeaf.
-	self 
+	| tree |
+	tree := CTRegionQuadTree bounds: (0@0 corner: 100@200).
+	self assert: tree height equals: 200
 ]
 
 { #category : #tests }
-CTRegionQuadTreeTest >> testSplit [
+CTRegionQuadTreeTest >> testQuadrantOfPoint [
+	
+	| tree q |
+	self flag: #tofinish.
+	tree := CTRegionQuadTree new.
+	tree split.
+	q := tree quadrantOf: (CTQuadPoint x: 2 y: 2 object: 'Chicago').
+	self assert: q equals: tree topLeftNode.
+]
+
+{ #category : #tests }
+CTRegionQuadTreeTest >> testSplitGemeotry [
+	
+	| tree |
+	tree := CTRegionQuadTree new.
+	tree split.
+	self assert: tree topLeftNode bounds equals: (0@0 corner: 50@50).
+	self assert: tree topRightNode bounds equals: (50@0 corner: 100@50).
+	self assert: tree bottomLeftNode bounds equals: (0@50 corner: 50@100).
+	self assert: tree bottomRightNode bounds equals: (50@50 corner: 100@100).
+]
+
+{ #category : #tests }
+CTRegionQuadTreeTest >> testSplitInstantiates4Children [
 	
 	| tree |
 	tree := CTRegionQuadTree new.
 	tree split.
 	self deny: tree isLeaf.
 	self assert: tree children size equals: 4.
+]
+
+{ #category : #tests }
+CTRegionQuadTreeTest >> testWidth [
+	
+	| tree |
+	tree := CTRegionQuadTree bounds: (0@0 corner: 100@200).
+	self assert: tree width equals: 100
 ]

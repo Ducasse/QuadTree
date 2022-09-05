@@ -7,11 +7,11 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'topLeftNode',
-		'rectangle',
 		'data',
 		'topRightNode',
 		'bottomRightNode',
-		'bottomLeftNode'
+		'bottomLeftNode',
+		'bounds'
 	],
 	#category : #QuadTree
 }
@@ -36,13 +36,23 @@ CTRegionQuadTree >> add: aCTQuadPoint [
 ]
 
 { #category : #accessing }
+CTRegionQuadTree >> bottomLeftNode [
+	^ bottomLeftNode
+]
+
+{ #category : #accessing }
+CTRegionQuadTree >> bottomRightNode [
+	^ bottomRightNode
+]
+
+{ #category : #accessing }
 CTRegionQuadTree >> bounds [
-	^ rectangle
+	^ bounds
 ]
 
 { #category : #accessing }
 CTRegionQuadTree >> bounds: aRectangle [ 
-	rectangle := aRectangle
+	bounds := aRectangle
 ]
 
 { #category : #accessing }
@@ -69,10 +79,15 @@ CTRegionQuadTree >> data [
 	^ data
 ]
 
+{ #category : #accessing }
+CTRegionQuadTree >> height [
+	^ bounds height
+]
+
 { #category : #initialization }
 CTRegionQuadTree >> initialize [ 
 	super initialize.
-	rectangle := 0@0 corner: 100@100
+	bounds := 0@0 corner: 100@100
 ]
 
 { #category : #testing }
@@ -90,16 +105,45 @@ CTRegionQuadTree >> isLeaf [
 ]
 
 { #category : #private }
+CTRegionQuadTree >> quadrantOf: aPoint [ 
+	"Precondition: aPoint is within bounds of parent".
+	
+	^ aPoint x < topRightNode x 
+		ifTrue: [ 
+			"left column"
+			aPoint y < topRightNode y
+				ifTrue: [ topLeftNode ] 
+				ifFalse: [ ] ]
+		ifFalse: [ 
+			"right column" ]
+]
+
+{ #category : #private }
 CTRegionQuadTree >> split [
 	"Create four children nodes"
 
 	| center origin corner |
-	center := rectangle floatCenter.
-	origin := rectangle origin.
-	corner := rectangle corner.
+	center := bounds floatCenter.
+	origin := bounds origin.
+	corner := bounds corner.
 
 	topLeftNode := self class bounds: (origin corner: center).
 	bottomLeftNode := self class bounds: (origin x @ center y corner: center x @ corner y).
 	topRightNode := self class bounds: (center x @ origin y corner: corner x @ center y).
 	bottomRightNode := self class bounds: (center corner: corner).
+]
+
+{ #category : #accessing }
+CTRegionQuadTree >> topLeftNode [
+	^ topLeftNode
+]
+
+{ #category : #accessing }
+CTRegionQuadTree >> topRightNode [
+	^ topRightNode
+]
+
+{ #category : #accessing }
+CTRegionQuadTree >> width [
+	^ bounds width
 ]
