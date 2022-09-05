@@ -52,14 +52,43 @@ CTRegionQuadTreeTest >> testHeight [
 ]
 
 { #category : #tests }
-CTRegionQuadTreeTest >> testQuadrantOfPoint [
+CTRegionQuadTreeTest >> testQuadrantOfPointBottomLeft [
 	
 	| tree q |
-	self flag: #tofinish.
+	tree := CTRegionQuadTree new.
+	tree split.
+	q := tree quadrantOf: (CTQuadPoint x: 2 y: 72 object: 'Chicago').
+	self assert: q equals: tree bottomLeftNode.
+]
+
+{ #category : #tests }
+CTRegionQuadTreeTest >> testQuadrantOfPointBottomRight [
+	
+	| tree q |
+	tree := CTRegionQuadTree new.
+	tree split.
+	q := tree quadrantOf: (CTQuadPoint x: 72 y: 52 object: 'Chicago').
+	self assert: q equals: tree bottomRightNode.
+]
+
+{ #category : #tests }
+CTRegionQuadTreeTest >> testQuadrantOfPointTopLeft [
+	
+	| tree q |
 	tree := CTRegionQuadTree new.
 	tree split.
 	q := tree quadrantOf: (CTQuadPoint x: 2 y: 2 object: 'Chicago').
 	self assert: q equals: tree topLeftNode.
+]
+
+{ #category : #tests }
+CTRegionQuadTreeTest >> testQuadrantOfPointTopRight [
+	
+	| tree q |
+	tree := CTRegionQuadTree new.
+	tree split.
+	q := tree quadrantOf: (CTQuadPoint x: 72 y: 2 object: 'Chicago').
+	self assert: q equals: tree topRightNode.
 ]
 
 { #category : #tests }

@@ -105,17 +105,21 @@ CTRegionQuadTree >> isLeaf [
 ]
 
 { #category : #private }
-CTRegionQuadTree >> quadrantOf: aPoint [ 
-	"Precondition: aPoint is within bounds of parent".
-	
-	^ aPoint x < topRightNode x 
-		ifTrue: [ 
-			"left column"
-			aPoint y < topRightNode y
-				ifTrue: [ topLeftNode ] 
-				ifFalse: [ ] ]
-		ifFalse: [ 
-			"right column" ]
+CTRegionQuadTree >> quadrantOf: aPoint [
+	| center corner |
+	center := bounds center.
+	corner := bounds corner.
+
+	^ aPoint x < center x
+		ifTrue: [
+			aPoint y < center y
+				ifTrue: [ topLeftNode ]
+				ifFalse: [ bottomLeftNode ] ]
+		ifFalse: [
+			aPoint y < center y
+				ifTrue: [ topRightNode ]
+				ifFalse: [ bottomRightNode ] ]
+
 ]
 
 { #category : #private }
