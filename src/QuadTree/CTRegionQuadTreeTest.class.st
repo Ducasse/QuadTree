@@ -17,6 +17,44 @@ CTRegionQuadTreeTest >> testAddOneElement [
 ]
 
 { #category : #tests }
+CTRegionQuadTreeTest >> testAddThreeElementsInSeparateQuads [
+	
+	| tree point point2 point3 |
+	tree := CTRegionQuadTree new.
+	point := CTQuadPoint x: 35 y: 42 object: 'Chicago'.
+	point2 := CTQuadPoint x: 52 y: 10 object: 'Mobile'.
+	point3 := CTQuadPoint x: 62 y: 77 object: 'Toronto'.
+	
+	tree add: point.
+	self assert: tree hasData.
+	tree add: point2.
+	self deny: tree hasData.
+	tree add: point3.
+	self deny: tree isLeaf.
+	self deny: tree hasData.
+	
+	self assert: tree topLeftNode data equals: point. 
+	self assert: tree topRightNode data equals: point2. 
+	self assert: tree bottomRightNode data equals: point3. 
+]
+
+{ #category : #tests }
+CTRegionQuadTreeTest >> testAddTwoElementsInSeparateQuads [
+	
+	| tree point point2 |
+	tree := CTRegionQuadTree new.
+	point := CTQuadPoint x: 35 y: 42 object: 'Chicago'.
+	point2 := CTQuadPoint x: 52 y: 10 object: 'Mobile'.
+	tree add: point.
+	tree add: point2.
+	self deny: tree isLeaf.
+	self deny: tree hasData.
+	
+	self assert: tree topLeftNode data equals: point. 
+	self assert: tree topRightNode data equals: point2. 
+]
+
+{ #category : #tests }
 CTRegionQuadTreeTest >> testEmptyTree [
 	
 	| tree |

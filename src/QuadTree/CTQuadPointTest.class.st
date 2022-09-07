@@ -14,6 +14,15 @@ CTQuadPointTest >> testCreatePoint [
 ]
 
 { #category : #tests }
+CTQuadPointTest >> testEquals [
+	| point point2 |
+	point := CTQuadPoint x: 35 y: 42 object: 'Chicago'.
+	self assert: point = point.
+	point2 := CTQuadPoint x: 35 y: 42 object: 'Chicago'.
+	self assert: point = point2
+]
+
+{ #category : #tests }
 CTQuadPointTest >> testIsInRectangle [
 	| point |
 	point := CTQuadPoint x: 35 y: 42 object: 'Chicago'.

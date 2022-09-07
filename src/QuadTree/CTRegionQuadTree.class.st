@@ -1,5 +1,7 @@
 "
-A region quad tree is a tree with 4 nodes.
+A PR (point region) quad tree following Sanet definition.
+A PR quadTree is a 2D tree. 
+It is either one node or a node with 4 children nodes.
 Each node has at most 1 element.
 "
 Class {
@@ -32,7 +34,24 @@ CTRegionQuadTree >> add: aCTQuadPoint [
 	if the point is part of a quadrant that is a leaf then we should split that leaf and add it there.
 	else it can just be added to a empty quadrant.
 	"
-	data := aCTQuadPoint.
+	
+	(self isLeaf and: [ self isEmpty]) 
+		ifTrue: [ data := aCTQuadPoint ]
+		ifFalse: [ 
+			| potentialSubQuad |
+			self isEmpty 
+				ifFalse: [ self split ].
+			potentialSubQuad := (self quadrantOf: aCTQuadPoint).
+			(potentialSubQuad isLeaf and: [ self isEmpty])
+				ifTrue: [ potentialSubQuad data: aCTQuadPoint ]
+				ifFalse: [ 
+					self split.
+					"we dispatch the parent data to one of the children
+					as the newly added point"
+					(self quadrantOf: data) add: data.
+					data := nil.
+					(self quadrantOf: aCTQuadPoint) add: aCTQuadPoint
+				]]
 ]
 
 { #category : #accessing }
@@ -80,6 +99,16 @@ CTRegionQuadTree >> data [
 ]
 
 { #category : #accessing }
+CTRegionQuadTree >> data: anObject [
+	data := anObject
+]
+
+{ #category : #testing }
+CTRegionQuadTree >> hasData [
+	^ data isNotNil
+]
+
+{ #category : #accessing }
 CTRegionQuadTree >> height [
 	^ bounds height
 ]
@@ -102,6 +131,16 @@ CTRegionQuadTree >> isLeaf [
 	"A leaf is a node which does not have children."
 	
 	^ topLeftNode isNil 
+]
+
+{ #category : #printing }
+CTRegionQuadTree >> printOn: aStream [
+
+	super printOn: aStream.
+	self isLeaf 	
+		ifTrue: [ aStream nextPutAll: ' Leaf with ' ; print: data ] 
+		ifFalse: [ aStream nextPutAll: ' Split' ]
+	
 ]
 
 { #category : #private }

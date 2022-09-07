@@ -4,7 +4,7 @@ Note that I could have been merged in the quad tree.
 "
 Class {
 	#name : #CTQuadPoint,
-	#superclass : #Object,
+	#superclass : #Magnitude,
 	#instVars : [
 		'point',
 		'object'
@@ -21,6 +21,26 @@ CTQuadPoint class >> x: anInteger y: anInteger2 object: anObject [
 		object: anObject
 ]
 
+{ #category : #comparing }
+CTQuadPoint >> < aPoint [ 
+	"Answer whether the receiver is above and to the left of aPoint."
+	
+	^ point < aPoint
+]
+
+{ #category : #comparing }
+CTQuadPoint >> = aQuadPoint [ 
+	"Answer whether the receiver is above and to the left of aPoint."
+	
+	^ point = aQuadPoint point and: [ object = aQuadPoint object  ]
+]
+
+{ #category : #comparing }
+CTQuadPoint >> hash [  
+	
+	^ point hash bitXor: object hash
+]
+
 { #category : #testing }
 CTQuadPoint >> isIn: aRectangle [ 
 	^ aRectangle containsPoint: point
@@ -29,6 +49,21 @@ CTQuadPoint >> isIn: aRectangle [
 { #category : #accessing }
 CTQuadPoint >> object [
 	^ object
+]
+
+{ #category : #accessing }
+CTQuadPoint >> point [
+	^ point
+]
+
+{ #category : #printing }
+CTQuadPoint >> printOn: aStream [
+
+	self x printOn: aStream.
+	aStream nextPut: $@.
+	self y printOn: aStream.
+	aStream nextPut: Character space.
+	self object printOn: aStream.
 ]
 
 { #category : #private }

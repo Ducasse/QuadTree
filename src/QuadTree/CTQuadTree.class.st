@@ -130,6 +130,16 @@ CTQuadTree >> position: aShape [
 	^ self class position: aShape.
 ]
 
+{ #category : #printing }
+CTQuadTree >> printOn: aStream [
+
+	self x printOn: aStream.
+	aStream nextPut: $@.
+	self y printOn: aStream.
+	aStream nextPut: Character space.
+	self object printOn: aStream.
+]
+
 { #category : #accessing }
 CTQuadTree >> rectangle [
 	^ rectangle
