@@ -5,6 +5,32 @@ Class {
 }
 
 { #category : #tests }
+CTRegionQuadTreeTest >> testAddFourElementsWithTwoInTopRightHenceSplittingTwoTimes [
+	
+	| tree point point2 point3 point4 |
+	tree := CTRegionQuadTree new.
+	point := CTQuadPoint x: 35 y: 42 object: 'Chicago'.
+	point2 := CTQuadPoint x: 52 y: 10 object: 'Mobile'.
+	point3 := CTQuadPoint x: 62 y: 77 object: 'Toronto'.
+	point4 := CTQuadPoint x: 82 y: 65 object: 'Buffalo'.
+	tree add: point.
+	self assert: tree hasData.
+	tree add: point2.
+	self deny: tree hasData.
+	tree add: point3.
+	self deny: tree isLeaf.
+	self deny: tree hasData.
+	self halt.
+	tree add: point4.
+	
+	self assert: tree topLeftNode data equals: point. 
+	self assert: tree topRightNode data equals: point2. 
+	
+	self assert: tree bottomRightNode bottomRightNode data equals: point3. 
+	self assert: tree bottomRightNode topLeftNode data equals: point4. 
+]
+
+{ #category : #tests }
 CTRegionQuadTreeTest >> testAddOneElement [ 
 	
 	| tree point |

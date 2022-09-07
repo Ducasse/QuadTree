@@ -42,7 +42,7 @@ CTRegionQuadTree >> add: aCTQuadPoint [
 			self isEmpty 
 				ifFalse: [ self split ].
 			potentialSubQuad := (self quadrantOf: aCTQuadPoint).
-			(potentialSubQuad isLeaf and: [ self isEmpty])
+			(potentialSubQuad isLeaf and: [ potentialSubQuad isEmpty])
 				ifTrue: [ potentialSubQuad data: aCTQuadPoint ]
 				ifFalse: [ 
 					self split.
