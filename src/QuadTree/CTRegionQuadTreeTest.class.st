@@ -20,14 +20,13 @@ CTRegionQuadTreeTest >> testAddFourElementsWithTwoInTopRightHenceSplittingTwoTim
 	tree add: point3.
 	self deny: tree isLeaf.
 	self deny: tree hasData.
-	self halt.
 	tree add: point4.
 	
 	self assert: tree topLeftNode data equals: point. 
 	self assert: tree topRightNode data equals: point2. 
 	
-	self assert: tree bottomRightNode bottomRightNode data equals: point3. 
-	self assert: tree bottomRightNode topLeftNode data equals: point4. 
+	self assert: tree bottomRightNode bottomLeftNode data equals: point3. 
+	self assert: tree bottomRightNode topRightNode data equals: point4. 
 ]
 
 { #category : #tests }
@@ -62,6 +61,29 @@ CTRegionQuadTreeTest >> testAddThreeElementsInSeparateQuads [
 	self assert: tree topLeftNode data equals: point. 
 	self assert: tree topRightNode data equals: point2. 
 	self assert: tree bottomRightNode data equals: point3. 
+]
+
+{ #category : #tests }
+CTRegionQuadTreeTest >> testAddTwoElementsInSameQuads [
+	
+	| tree point point2 |
+	tree := CTRegionQuadTree new.
+	point := CTQuadPoint x: 10 y: 10 object: 'topleftoftopleft'.
+	point2 := CTQuadPoint x: 40 y: 40  object: 'bottomrightoftopleft'.
+	tree add: point.
+	tree add: point2.
+	self deny: tree isLeaf.
+	self deny: tree hasData.
+	
+	self assert: tree topLeftNode topLeftNode data equals: point. 
+	self assert: tree topLeftNode bottomRightNode data equals: point2.
+	
+	self assert: tree topRightNode isLeaf.
+	self deny: tree topRightNode hasData.
+	self assert: tree bottomRightNode isLeaf.
+	self deny: tree bottomRightNode hasData.
+	self assert: tree bottomLeftNode isLeaf.
+	self deny: tree bottomLeftNode hasData.
 ]
 
 { #category : #tests }

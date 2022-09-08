@@ -38,19 +38,15 @@ CTRegionQuadTree >> add: aCTQuadPoint [
 	(self isLeaf and: [ self isEmpty]) 
 		ifTrue: [ data := aCTQuadPoint ]
 		ifFalse: [ 
-			| potentialSubQuad |
-			self isEmpty 
-				ifFalse: [ self split ].
-			potentialSubQuad := (self quadrantOf: aCTQuadPoint).
-			(potentialSubQuad isLeaf and: [ potentialSubQuad isEmpty])
-				ifTrue: [ potentialSubQuad data: aCTQuadPoint ]
-				ifFalse: [ 
-					self split.
-					"we dispatch the parent data to one of the children
-					as the newly added point"
-					(self quadrantOf: data) add: data.
-					data := nil.
-					(self quadrantOf: aCTQuadPoint) add: aCTQuadPoint
+				self isLeaf 
+					ifFalse: [ "it was split, pick up the correct quads"
+						(self quadrantOf: aCTQuadPoint) add: aCTQuadPoint
+						 ]
+					ifTrue: [  
+						self split.
+						(self quadrantOf: data) add: data.
+						data := nil.
+						(self quadrantOf: aCTQuadPoint) add: aCTQuadPoint
 				]]
 ]
 
