@@ -5,10 +5,16 @@ Class {
 }
 
 { #category : #tests }
+CTRegionQuadTreeTest >> quadTreeClass [
+
+	^ CTRegionQuadTree
+]
+
+{ #category : #'tests - adding' }
 CTRegionQuadTreeTest >> testAddFourElementsWithTwoInTopRightHenceSplittingTwoTimes [
-	
+
 	| tree point point2 point3 point4 |
-	tree := CTRegionQuadTree new.
+	tree := self quadTreeClass new.
 	point := CTQuadPoint x: 35 y: 42 object: 'Chicago'.
 	point2 := CTQuadPoint x: 52 y: 10 object: 'Mobile'.
 	point3 := CTQuadPoint x: 62 y: 77 object: 'Toronto'.
@@ -21,35 +27,35 @@ CTRegionQuadTreeTest >> testAddFourElementsWithTwoInTopRightHenceSplittingTwoTim
 	self deny: tree isLeaf.
 	self deny: tree hasData.
 	tree add: point4.
-	
-	self assert: tree topLeftNode data equals: point. 
-	self assert: tree topRightNode data equals: point2. 
-	
-	self assert: tree bottomRightNode bottomLeftNode data equals: point3. 
-	self assert: tree bottomRightNode topRightNode data equals: point4. 
+
+	self assert: tree topLeftNode data equals: point.
+	self assert: tree topRightNode data equals: point2.
+
+	self assert: tree bottomRightNode bottomLeftNode data equals: point3.
+	self assert: tree bottomRightNode topRightNode data equals: point4
 ]
 
-{ #category : #tests }
-CTRegionQuadTreeTest >> testAddOneElement [ 
-	
+{ #category : #'tests - adding' }
+CTRegionQuadTreeTest >> testAddOneElement [
+
 	| tree point |
-	tree := CTRegionQuadTree new.
-	point := (CTQuadPoint x: 35 y: 42 object: 'Chicago').
+	tree := self quadTreeClass new.
+	point := CTQuadPoint x: 35 y: 42 object: 'Chicago'.
 	tree add: point.
 	self assert: tree isLeaf.
 	self assert: tree data equals: point.
-	self assert: tree bounds equals: (0@0 corner: 100@100)
+	self assert: tree bounds equals: (0 @ 0 corner: 100 @ 100)
 ]
 
-{ #category : #tests }
+{ #category : #'tests - adding' }
 CTRegionQuadTreeTest >> testAddThreeElementsInSeparateQuads [
-	
+
 	| tree point point2 point3 |
-	tree := CTRegionQuadTree new.
+	tree := self quadTreeClass new.
 	point := CTQuadPoint x: 35 y: 42 object: 'Chicago'.
 	point2 := CTQuadPoint x: 52 y: 10 object: 'Mobile'.
 	point3 := CTQuadPoint x: 62 y: 77 object: 'Toronto'.
-	
+
 	tree add: point.
 	self assert: tree hasData.
 	tree add: point2.
@@ -57,152 +63,192 @@ CTRegionQuadTreeTest >> testAddThreeElementsInSeparateQuads [
 	tree add: point3.
 	self deny: tree isLeaf.
 	self deny: tree hasData.
-	
-	self assert: tree topLeftNode data equals: point. 
-	self assert: tree topRightNode data equals: point2. 
-	self assert: tree bottomRightNode data equals: point3. 
+
+	self assert: tree topLeftNode data equals: point.
+	self assert: tree topRightNode data equals: point2.
+	self assert: tree bottomRightNode data equals: point3
 ]
 
-{ #category : #tests }
+{ #category : #'tests - adding' }
 CTRegionQuadTreeTest >> testAddTwoElementsInSameQuads [
-	
+
 	| tree point point2 |
-	tree := CTRegionQuadTree new.
+	tree := self quadTreeClass new.
 	point := CTQuadPoint x: 10 y: 10 object: 'topleftoftopleft'.
-	point2 := CTQuadPoint x: 40 y: 40  object: 'bottomrightoftopleft'.
+	point2 := CTQuadPoint x: 40 y: 40 object: 'bottomrightoftopleft'.
 	tree add: point.
 	tree add: point2.
 	self deny: tree isLeaf.
 	self deny: tree hasData.
-	
-	self assert: tree topLeftNode topLeftNode data equals: point. 
+
+	self assert: tree topLeftNode topLeftNode data equals: point.
 	self assert: tree topLeftNode bottomRightNode data equals: point2.
-	
+
 	self assert: tree topRightNode isLeaf.
 	self deny: tree topRightNode hasData.
 	self assert: tree bottomRightNode isLeaf.
 	self deny: tree bottomRightNode hasData.
 	self assert: tree bottomLeftNode isLeaf.
-	self deny: tree bottomLeftNode hasData.
+	self deny: tree bottomLeftNode hasData
 ]
 
-{ #category : #tests }
+{ #category : #'tests - adding' }
 CTRegionQuadTreeTest >> testAddTwoElementsInSeparateQuads [
-	
+
 	| tree point point2 |
-	tree := CTRegionQuadTree new.
+	tree := self quadTreeClass new.
 	point := CTQuadPoint x: 35 y: 42 object: 'Chicago'.
 	point2 := CTQuadPoint x: 52 y: 10 object: 'Mobile'.
 	tree add: point.
 	tree add: point2.
 	self deny: tree isLeaf.
 	self deny: tree hasData.
-	
-	self assert: tree topLeftNode data equals: point. 
-	self assert: tree topRightNode data equals: point2. 
+
+	self assert: tree topLeftNode data equals: point.
+	self assert: tree topRightNode data equals: point2
 ]
 
-{ #category : #tests }
+{ #category : #'tests - find' }
+CTRegionQuadTreeTest >> testElementsWithin [
+
+	self halt.
+]
+
+{ #category : #'tests - find' }
+CTRegionQuadTreeTest >> testElementsWithinDoesNotFindAny [
+
+	| tree point point2 point3 point4 col |
+	tree := self quadTreeClass new.
+	point := CTQuadPoint x: 35 y: 42 object: 'Chicago'.
+	point2 := CTQuadPoint x: 52 y: 10 object: 'Mobile'.
+	point3 := CTQuadPoint x: 62 y: 77 object: 'Toronto'.
+	point4 := CTQuadPoint x: 82 y: 65 object: 'Buffalo'.
+	tree add: point.
+	tree add: point2.
+	tree add: point3.
+	tree add: point4.
+
+	col := tree elementsWithin: (10 @ 10 corner: 30 @ 30).
+	self assert: col isEmpty
+]
+
+{ #category : #'tests - creation' }
 CTRegionQuadTreeTest >> testEmptyTree [
-	
+
 	| tree |
-	tree := CTRegionQuadTree new.
+	tree := self quadTreeClass new.
 	self assert: tree isLeaf.
-	self assert: tree bounds equals: (0@0 corner: 100@100)
+	self assert: tree bounds equals: (0 @ 0 corner: 100 @ 100)
 ]
 
-{ #category : #tests }
+{ #category : #'tests - creation' }
 CTRegionQuadTreeTest >> testEmptyTreeOfBounds [
-	
+
 	| tree |
-	tree := CTRegionQuadTree bounds: (0@0 corner: 100@100).
+	tree := self quadTreeClass bounds: (0 @ 0 corner: 100 @ 100).
 	self assert: tree isLeaf.
-	self assert: tree bounds equals: (0@0 corner: 100@100)
+	self assert: tree bounds equals: (0 @ 0 corner: 100 @ 100)
 ]
 
-{ #category : #tests }
+{ #category : #'tests - creation' }
 CTRegionQuadTreeTest >> testEmptyTreeOfExtent [
-	
+
 	| tree |
-	tree := CTRegionQuadTree extent: 100@100.
+	tree := self quadTreeClass extent: 100 @ 100.
 	self assert: tree isLeaf.
-	self assert: tree bounds equals: (0@0 corner: 100@100)
+	self assert: tree bounds equals: (0 @ 0 corner: 100 @ 100)
 ]
 
 { #category : #tests }
 CTRegionQuadTreeTest >> testHeight [
-	
+
 	| tree |
-	tree := CTRegionQuadTree bounds: (0@0 corner: 100@200).
+	tree := self quadTreeClass bounds: (0 @ 0 corner: 100 @ 200).
 	self assert: tree height equals: 200
 ]
 
-{ #category : #tests }
+{ #category : #'tests - quadrant' }
 CTRegionQuadTreeTest >> testQuadrantOfPointBottomLeft [
-	
+
 	| tree q |
-	tree := CTRegionQuadTree new.
+	tree := self quadTreeClass new.
 	tree split.
 	q := tree quadrantOf: (CTQuadPoint x: 2 y: 72 object: 'Chicago').
-	self assert: q equals: tree bottomLeftNode.
+	self assert: q equals: tree bottomLeftNode
 ]
 
-{ #category : #tests }
+{ #category : #'tests - quadrant' }
 CTRegionQuadTreeTest >> testQuadrantOfPointBottomRight [
-	
+
 	| tree q |
-	tree := CTRegionQuadTree new.
+	tree := self quadTreeClass new.
 	tree split.
 	q := tree quadrantOf: (CTQuadPoint x: 72 y: 52 object: 'Chicago').
-	self assert: q equals: tree bottomRightNode.
+	self assert: q equals: tree bottomRightNode
 ]
 
-{ #category : #tests }
+{ #category : #'tests - quadrant' }
 CTRegionQuadTreeTest >> testQuadrantOfPointTopLeft [
-	
+
 	| tree q |
-	tree := CTRegionQuadTree new.
+	tree := self quadTreeClass new.
 	tree split.
 	q := tree quadrantOf: (CTQuadPoint x: 2 y: 2 object: 'Chicago').
-	self assert: q equals: tree topLeftNode.
+	self assert: q equals: tree topLeftNode
 ]
 
-{ #category : #tests }
+{ #category : #'tests - quadrant' }
 CTRegionQuadTreeTest >> testQuadrantOfPointTopRight [
-	
+
 	| tree q |
-	tree := CTRegionQuadTree new.
+	tree := self quadTreeClass new.
 	tree split.
 	q := tree quadrantOf: (CTQuadPoint x: 72 y: 2 object: 'Chicago').
-	self assert: q equals: tree topRightNode.
+	self assert: q equals: tree topRightNode
 ]
 
-{ #category : #tests }
+{ #category : #'tests - split' }
 CTRegionQuadTreeTest >> testSplitGemeotry [
-	
+
 	| tree |
-	tree := CTRegionQuadTree new.
+	tree := self quadTreeClass new.
 	tree split.
-	self assert: tree topLeftNode bounds equals: (0@0 corner: 50@50).
-	self assert: tree topRightNode bounds equals: (50@0 corner: 100@50).
-	self assert: tree bottomLeftNode bounds equals: (0@50 corner: 50@100).
-	self assert: tree bottomRightNode bounds equals: (50@50 corner: 100@100).
+	self assert: tree topLeftNode bounds equals: (0 @ 0 corner: 50 @ 50).
+	self
+		assert: tree topRightNode bounds
+		equals: (50 @ 0 corner: 100 @ 50).
+	self
+		assert: tree bottomLeftNode bounds
+		equals: (0 @ 50 corner: 50 @ 100).
+	self
+		assert: tree bottomRightNode bounds
+		equals: (50 @ 50 corner: 100 @ 100)
 ]
 
-{ #category : #tests }
+{ #category : #'tests - split' }
 CTRegionQuadTreeTest >> testSplitInstantiates4Children [
-	
+
 	| tree |
-	tree := CTRegionQuadTree new.
+	tree := self quadTreeClass new.
 	tree split.
 	self deny: tree isLeaf.
-	self assert: tree children size equals: 4.
+	self assert: tree children size equals: 4
+]
+
+{ #category : #'tests - traversal ' }
+CTRegionQuadTreeTest >> testTreePointsTraversal [
+
+	| col | 
+	col := OrderedCollection new. 
+	self quadTreeClass troisPoints do: [ :each | col add: each ].
+	self assert: col size equals: 3.
+	
 ]
 
 { #category : #tests }
 CTRegionQuadTreeTest >> testWidth [
-	
+
 	| tree |
-	tree := CTRegionQuadTree bounds: (0@0 corner: 100@200).
+	tree := self quadTreeClass bounds: (0 @ 0 corner: 100 @ 200).
 	self assert: tree width equals: 100
 ]

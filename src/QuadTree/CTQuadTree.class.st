@@ -164,15 +164,6 @@ CTQuadTree >> subQuadsDo: aBlockClosure [
 
 ]
 
-{ #category : #'finding/searching' }
-CTQuadTree >> visibleShapesFrom: aRectangle [
-
-	| listResult |
-	listResult := OrderedCollection new.
-	self visibleShapesFrom: aRectangle list: listResult.
-	^ listResult
-]
-
 { #category : #private }
 CTQuadTree >> visibleShapesFrom: aRectangle list: listResult [
 

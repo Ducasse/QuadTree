@@ -1,8 +1,13 @@
 "
 A PR (point region) quad tree following Sanet definition.
-A PR quadTree is a 2D tree. 
-It is either one node or a node with 4 children nodes.
-Each node has at most 1 element.
+A PR quadTree is a 2D tree as such it has a bounds and this bounds is divided in its children.
+
+It is either 
+- one node with its data or 
+- a node (and no data because each child will have its own) with 4 children nodes.
+Each node has at most 1 data element.
+
+
 "
 Class {
 	#name : #CTRegionQuadTree,
@@ -26,6 +31,19 @@ CTRegionQuadTree class >> bounds: aRectangle [
 { #category : #'instance creation' }
 CTRegionQuadTree class >> extent: aPoint [ 
 	^ self new bounds: (0@0 corner: aPoint); yourself
+]
+
+{ #category : #examples }
+CTRegionQuadTree class >> troisPoints [
+	<sampleInstance> 
+	
+	| tree point point2 point3 |
+	tree := self new.
+	point := CTQuadPoint x: 35 y: 42 object: 'Chicago'.
+	point2 := CTQuadPoint x: 52 y: 10 object: 'Mobile'.
+	point3 := CTQuadPoint x: 62 y: 77 object: 'Toronto'.
+	tree add: point; add: point2; add: point3.
+	^ tree
 ]
 
 { #category : #adding }
@@ -99,6 +117,23 @@ CTRegionQuadTree >> data: anObject [
 	data := anObject
 ]
 
+{ #category : #iteration }
+CTRegionQuadTree >> do: aBlock [
+
+	self isLeaf
+		ifTrue: [ aBlock value: self ]
+		ifFalse: [ self subQuadsDo: aBlock ]
+]
+
+{ #category : #'looking for' }
+CTRegionQuadTree >> elementsWithin: aRectangle [ 
+	
+	(self bounds intersects: aRectangle)
+	self halt.
+	
+	 
+]
+
 { #category : #testing }
 CTRegionQuadTree >> hasData [
 	^ data isNotNil
@@ -170,6 +205,15 @@ CTRegionQuadTree >> split [
 	bottomLeftNode := self class bounds: (origin x @ center y corner: center x @ corner y).
 	topRightNode := self class bounds: (center x @ origin y corner: corner x @ center y).
 	bottomRightNode := self class bounds: (center corner: corner).
+]
+
+{ #category : #iteration }
+CTRegionQuadTree >> subQuadsDo: aBlock [
+
+	aBlock value: self topLeftNode.
+	aBlock value: self topRightNode.
+	aBlock value: self bottomRightNode.
+	aBlock value: self bottomLeftNode
 ]
 
 { #category : #accessing }

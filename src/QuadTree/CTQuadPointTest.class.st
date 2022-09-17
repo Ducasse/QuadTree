@@ -31,3 +31,12 @@ CTQuadPointTest >> testIsInRectangle [
 	self assert: (point isIn: (0@0 corner: 50@50)).
 	self deny: (point isIn: (50@50 corner: 100@100)).
 ]
+
+{ #category : #'finding/searching' }
+CTQuadPointTest >> visibleShapesFrom: aRectangle [
+
+	| listResult |
+	listResult := OrderedCollection new.
+	self visibleShapesFrom: aRectangle list: listResult.
+	^ listResult
+]
