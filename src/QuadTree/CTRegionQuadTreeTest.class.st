@@ -222,6 +222,21 @@ CTRegionQuadTreeTest >> testSevenTraversal [
 	
 ]
 
+{ #category : #'tests - traversal ' }
+CTRegionQuadTreeTest >> testSevenTraversalWithData [
+
+	| col tree |
+	tree := self quadTreeClass new.
+	{  CTQuadPoint x: 35 y: 42 object: 'Chicago'.
+	CTQuadPoint x: 52 y: 10 object: 'Mobile'.
+	CTQuadPoint x: 62 y: 77 object: 'Toronto'.
+	CTQuadPoint x: 82 y: 65 object: 'Buffalo'}  do: [ :each | tree add: each ]. 
+	col := OrderedCollection new. 
+	tree do: [ :each | each hasData ifTrue: [ col add: each data point ]].
+		
+	self assert: col asArray equals: { 35@42 . 52@10 .  82@65 . 62@77 }
+]
+
 { #category : #'tests - split' }
 CTRegionQuadTreeTest >> testSplitGemeotry [
 
