@@ -119,7 +119,8 @@ CTRegionQuadTree >> data: anObject [
 
 { #category : #iteration }
 CTRegionQuadTree >> do: aBlock [
-
+	"Execute the argument on every nodes."
+	
 	self isLeaf
 		ifTrue: [ aBlock value: self ]
 		ifFalse: [ self subQuadsDo: aBlock ]
@@ -210,10 +211,10 @@ CTRegionQuadTree >> split [
 { #category : #iteration }
 CTRegionQuadTree >> subQuadsDo: aBlock [
 
-	aBlock value: self topLeftNode.
-	aBlock value: self topRightNode.
-	aBlock value: self bottomRightNode.
-	aBlock value: self bottomLeftNode
+	self topLeftNode do: aBlock.
+	self topRightNode do: aBlock.
+	self bottomRightNode do: aBlock.
+	self bottomLeftNode do: aBlock.
 ]
 
 { #category : #accessing }

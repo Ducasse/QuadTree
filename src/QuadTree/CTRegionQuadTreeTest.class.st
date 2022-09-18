@@ -207,6 +207,21 @@ CTRegionQuadTreeTest >> testQuadrantOfPointTopRight [
 	self assert: q equals: tree topRightNode
 ]
 
+{ #category : #'tests - traversal ' }
+CTRegionQuadTreeTest >> testSevenTraversal [
+
+	| col tree |
+	tree := self quadTreeClass new.
+	{  CTQuadPoint x: 35 y: 42 object: 'Chicago'.
+	CTQuadPoint x: 52 y: 10 object: 'Mobile'.
+	CTQuadPoint x: 62 y: 77 object: 'Toronto'.
+	CTQuadPoint x: 82 y: 65 object: 'Buffalo'}  do: [ :each | tree add: each ]. 
+	col := OrderedCollection new. 
+	tree do: [ :each | col add: each ].
+	self assert: col size equals: 7.
+	
+]
+
 { #category : #'tests - split' }
 CTRegionQuadTreeTest >> testSplitGemeotry [
 
@@ -241,7 +256,7 @@ CTRegionQuadTreeTest >> testTreePointsTraversal [
 	| col | 
 	col := OrderedCollection new. 
 	self quadTreeClass troisPoints do: [ :each | col add: each ].
-	self assert: col size equals: 3.
+	self assert: col size equals: 4.
 	
 ]
 
