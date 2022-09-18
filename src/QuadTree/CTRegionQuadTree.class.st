@@ -68,7 +68,7 @@ CTRegionQuadTree >> add: aCTQuadPoint [
 				]]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CTRegionQuadTree >> allData [
 
 	| col | 
