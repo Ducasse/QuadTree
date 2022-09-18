@@ -68,6 +68,15 @@ CTRegionQuadTree >> add: aCTQuadPoint [
 				]]
 ]
 
+{ #category : #'as yet unclassified' }
+CTRegionQuadTree >> allData [
+
+	| col | 
+	col := OrderedCollection new.
+	self do: [ :each | each hasData ifTrue: [  col add: each data ]  ].
+	^ col
+]
+
 { #category : #accessing }
 CTRegionQuadTree >> bottomLeftNode [
 	^ bottomLeftNode
@@ -130,7 +139,7 @@ CTRegionQuadTree >> do: aBlock [
 CTRegionQuadTree >> elementsWithin: aRectangle [ 
 	
 	(self bounds intersects: aRectangle)
-	self halt.
+		ifFalse: [ ^ #() ]	
 	
 	 
 ]
@@ -163,6 +172,15 @@ CTRegionQuadTree >> isLeaf [
 	"A leaf is a node which does not have children."
 	
 	^ topLeftNode isNil 
+]
+
+{ #category : #accessing }
+CTRegionQuadTree >> numberOfNodes [
+	
+	| count |
+	count := 0.
+	self do: [ :each | count := count + 1 ].
+	^ count
 ]
 
 { #category : #printing }

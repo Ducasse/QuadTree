@@ -167,6 +167,23 @@ CTRegionQuadTreeTest >> testHeight [
 	self assert: tree height equals: 200
 ]
 
+{ #category : #'tests - split' }
+CTRegionQuadTreeTest >> testNumberOfNodes [
+
+	| tree point point2 point3 point4 |
+	tree := self quadTreeClass new.
+	point := CTQuadPoint x: 35 y: 42 object: 'Chicago'.
+	point2 := CTQuadPoint x: 52 y: 10 object: 'Mobile'.
+	point3 := CTQuadPoint x: 62 y: 77 object: 'Toronto'.
+	point4 := CTQuadPoint x: 82 y: 65 object: 'Buffalo'.
+	tree add: point.
+	tree add: point2.
+	tree add: point3.
+	tree add: point4.
+	
+	self assert: tree numberOfNodes equals: 7
+]
+
 { #category : #'tests - quadrant' }
 CTRegionQuadTreeTest >> testQuadrantOfPointBottomLeft [
 
