@@ -18,6 +18,6 @@ CTOriginAtBottomLeftInteraction >> updateOriginPosition: evt [
 	"(width / 2) @ (height / -2) "
 	"negative for the height would be to have the zero bottom left"
 	camera position: extent / ( 2@ 2).
-	camera zoomToFit: extent.
+	"camera zoomToFit: extent. better doing it via another interaction"
 	canvas signalUpdate
 ]

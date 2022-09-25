@@ -25,6 +25,8 @@ QuadTreeVisualizer >> createPointFor: aQuadPoint [
 QuadTreeVisualizer >> defaultContainer [
 	^ super defaultContainer 
 		addInteraction: CTOriginAtBottomLeftInteraction new;
+		addInteraction: RSZoomToFitCanvasInteraction new;
+		addInteraction: (RSMenuActivable new menuDo: [ :menu :element | menu add: 'Inspect' target: element model selector: #inspect ])
 		yourself
 ]
 
@@ -72,6 +74,8 @@ QuadTreeVisualizer >> quadTree: aQuadTree [
 QuadTreeVisualizer >> renderIn: aCanvas [
 
 	| circles |
+	aCanvas when: RSMouseClick do: [ :evt |
+			quadTree add: (CTQuadPoint point: evt position object: 'OnTheFly')  ].
 	self drawBorderOn: aCanvas.
 	circles := quadTree allData collect: [ :each | self createPointFor: each ].
 	aCanvas addAll: circles
