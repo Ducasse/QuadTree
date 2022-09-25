@@ -213,8 +213,8 @@ CTRegionQuadTree >> printOn: aStream [
 
 	super printOn: aStream.
 	self isLeaf 	
-		ifTrue: [ aStream nextPutAll: ' Leaf with ' ; print: data ] 
-		ifFalse: [ aStream nextPutAll: ' Split' ]
+		ifTrue: [ aStream nextPutAll: '[Leaf with ' ; print: data; nextPutAll: ']' ] 
+		ifFalse: [ aStream nextPutAll: ' [Split]' ]
 	
 ]
 

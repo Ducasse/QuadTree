@@ -15,8 +15,7 @@ Class {
 CTQuadPoint class >> point: aPoint object: anObject [ 
 	
 	^ self new 
-		setX: aPoint x  
-		y: aPoint y;
+		setX: aPoint x setY: aPoint y;
 		object: anObject
 ]
 
