@@ -126,6 +126,11 @@ CTRegionQuadTree >> data: anObject [
 	data := anObject
 ]
 
+{ #category : #'accessing - defaults' }
+CTRegionQuadTree >> defaultContainer [
+	^ super defaultContainer @ RSCanvasController
+]
+
 { #category : #iteration }
 CTRegionQuadTree >> do: aBlock [
 	"Execute the argument on every nodes."

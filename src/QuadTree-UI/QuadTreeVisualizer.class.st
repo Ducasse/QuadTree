@@ -10,14 +10,21 @@ Class {
 { #category : #hooks }
 QuadTreeVisualizer >> createPointFor: aQuadPoint [
 
-    ^ RSCircle new
-        model: aQuadPoint;
-			extent: 10@10; 
-			x: aQuadPoint x;
-			y: aQuadPoint y;
-        popup;
-        draggable;
-        yourself
+	^ RSEllipse new
+		  model: aQuadPoint;
+		  size: 10;
+		  x: aQuadPoint x * 5;
+		  y: aQuadPoint y * 5;
+		  popup;
+		  draggable;
+		  yourself
+]
+
+{ #category : #'accessing - defaults' }
+QuadTreeVisualizer >> defaultContainer [
+	^ super defaultContainer 
+		addInteraction: CTOriginAtBottomLeftInteraction new;
+		yourself
 ]
 
 { #category : #accessing }
@@ -28,10 +35,8 @@ QuadTreeVisualizer >> quadTree: aQuadTree [
 
 { #category : #hooks }
 QuadTreeVisualizer >> renderIn: aCanvas [
-	
+
 	| circles |
 	circles := quadTree allData collect: [ :each | self createPointFor: each ].
-	aCanvas addAll: circles.
-
-	
+	aCanvas addAll: circles
 ]

@@ -8,3 +8,8 @@ CTRegionQuadTree >> inspectorTreeBuilder [
         quadTree: self ;
         asPresenter
 ]
+
+{ #category : #'*QuadTree-UI' }
+CTRegionQuadTree >> inspectorTreeBuilderContext: aContext [
+   aContext withoutEvaluator
+]
