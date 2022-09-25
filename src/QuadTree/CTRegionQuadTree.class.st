@@ -34,6 +34,20 @@ CTRegionQuadTree class >> extent: aPoint [
 ]
 
 { #category : #examples }
+CTRegionQuadTree class >> fourPoints [
+	<sampleInstance> 
+	
+	| tree all |
+	tree := self new.
+	all := { CTQuadPoint x: 35 y: 42 object: 'Chicago'.
+	CTQuadPoint x: 52 y: 10 object: 'Mobile'.
+	CTQuadPoint x: 62 y: 77 object: 'Toronto'.
+	CTQuadPoint x: 82 y: 65 object: 'Buffalo'}.
+	tree addAll: all.
+	^ tree
+]
+
+{ #category : #examples }
 CTRegionQuadTree class >> troisPoints [
 	<sampleInstance> 
 	
@@ -66,6 +80,12 @@ CTRegionQuadTree >> add: aCTQuadPoint [
 						data := nil.
 						(self quadrantOf: aCTQuadPoint) add: aCTQuadPoint
 				]]
+]
+
+{ #category : #adding }
+CTRegionQuadTree >> addAll: aCollection [ 
+
+	aCollection do: [ :each | self add: each ]
 ]
 
 { #category : #accessing }
