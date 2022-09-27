@@ -7,6 +7,9 @@ It is either
 - a node (and no data because each child will have its own) with 4 children nodes.
 Each node has at most 1 data element.
 
+Todo:
+- findNodeInAreaOf: aPoint
+- findNodeInARectangle: rectangle
 
 "
 Class {
