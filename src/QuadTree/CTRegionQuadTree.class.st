@@ -67,6 +67,8 @@ CTRegionQuadTree >> add: aCTQuadPoint [
 	else it can just be added to a empty quadrant.
 	"
 	
+	(bounds containsPoint: aCTQuadPoint) 
+		ifFalse: [ ^ self ].
 	(self isLeaf and: [ self isEmpty]) 
 		ifTrue: [ data := aCTQuadPoint ]
 		ifFalse: [ 

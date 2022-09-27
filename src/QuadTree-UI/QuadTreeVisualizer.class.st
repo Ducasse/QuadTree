@@ -8,6 +8,12 @@ Class {
 	#category : #'QuadTree-UI'
 }
 
+{ #category : #adding }
+QuadTreeVisualizer >> addPoint: event [
+ 	quadTree add: (CTQuadPoint point: event position object: 'OnTheFly').
+ 	self update
+]
+
 { #category : #hooks }
 QuadTreeVisualizer >> createPointFor: aQuadPoint [
 
@@ -25,9 +31,9 @@ QuadTreeVisualizer >> createPointFor: aQuadPoint [
 QuadTreeVisualizer >> defaultContainer [
 	^ super defaultContainer 
 		addInteraction: CTOriginAtBottomLeftInteraction new;
-		addInteraction: RSZoomToFitCanvasInteraction new;
-		addInteraction: (RSMenuActivable new menuDo: [ :menu :element | menu add: 'Inspect' target: element model selector: #inspect ])
-		yourself
+		when: RSMouseClick send: #addPoint: to: self;
+ 		yourself
+	
 ]
 
 { #category : #hooks }
@@ -74,8 +80,6 @@ QuadTreeVisualizer >> quadTree: aQuadTree [
 QuadTreeVisualizer >> renderIn: aCanvas [
 
 	| circles |
-	aCanvas when: RSMouseClick do: [ :evt |
-			quadTree add: (CTQuadPoint point: evt position object: 'OnTheFly')  ].
 	self drawBorderOn: aCanvas.
 	circles := quadTree allData collect: [ :each | self createPointFor: each ].
 	aCanvas addAll: circles

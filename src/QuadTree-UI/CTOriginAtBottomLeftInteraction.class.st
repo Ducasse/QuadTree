@@ -11,13 +11,15 @@ CTOriginAtBottomLeftInteraction >> onShape: aCanvas [
 
 { #category : #hooks }
 CTOriginAtBottomLeftInteraction >> updateOriginPosition: evt [
-	| canvas camera extent |
+	| canvas camera extent scale |
 	canvas := evt canvas.
-	extent := canvas extent.
+	extent := canvas extent * 0.95.
 	camera := evt camera.
 	"(width / 2) @ (height / -2) "
 	"negative for the height would be to have the zero bottom left"
-	camera position: extent / ( 2@ 2).
-	"camera zoomToFit: extent. better doing it via another interaction"
+	"camera position: extent / ( 2@ 2)."
+	scale := (extent / canvas shapes extent) min.
+	camera scale: scale.
+	camera position: (extent / 2/ scale).
 	canvas signalUpdate
 ]
