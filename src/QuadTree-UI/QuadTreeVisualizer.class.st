@@ -8,25 +8,37 @@ Class {
 	#category : #'QuadTree-UI'
 }
 
+{ #category : #'events - processing' }
+QuadTreeVisualizer >> addPoint: event [
+	quadTree add: (CTQuadPoint point: event position object: 'OnTheFly').
+	self update.
+	
+]
+
 { #category : #hooks }
 QuadTreeVisualizer >> createPointFor: aQuadPoint [
 
 	^ RSEllipse new
-		  model: aQuadPoint;
-		  size: self pointSize;
-		  x: aQuadPoint x;
-		  y: aQuadPoint y;
-		  popup;
-		  draggable;
-		  yourself
+		model: aQuadPoint;
+		size: self pointSize;
+		x: aQuadPoint x;
+		y: aQuadPoint y;
+		addInteraction: (RSMenuActivable new
+		  	  menuDo: [ :menu :element |
+				menu add: 'Inspect' target: element model selector: #inspect ]);
+		popup;
+		draggable;
+		yourself
 ]
 
 { #category : #'accessing - defaults' }
 QuadTreeVisualizer >> defaultContainer [
 	^ super defaultContainer 
-		addInteraction: CTOriginAtBottomLeftInteraction new;
+		"addInteraction: CTOriginAtBottomLeftInteraction new;
 		addInteraction: RSZoomToFitCanvasInteraction new;
-		addInteraction: (RSMenuActivable new menuDo: [ :menu :element | menu add: 'Inspect' target: element model selector: #inspect ])
+		addInteraction: (RSMenuActivable new menuDo: [ :menu :element | menu add: 'Inspect' target: element model selector: #inspect ])"
+		addInteraction: RSCanvasController new;
+		when: RSMouseClick send: #addPoint: to: self;
 		yourself
 ]
 
@@ -74,8 +86,6 @@ QuadTreeVisualizer >> quadTree: aQuadTree [
 QuadTreeVisualizer >> renderIn: aCanvas [
 
 	| circles |
-	aCanvas when: RSMouseClick do: [ :evt |
-			quadTree add: (CTQuadPoint point: evt position object: 'OnTheFly')  ].
 	self drawBorderOn: aCanvas.
 	circles := quadTree allData collect: [ :each | self createPointFor: each ].
 	aCanvas addAll: circles
