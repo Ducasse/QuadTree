@@ -109,12 +109,6 @@ CTRegionQuadTreeTest >> testAddTwoElementsInSeparateQuads [
 ]
 
 { #category : #'tests - find' }
-CTRegionQuadTreeTest >> testElementsWithin [
-
-	self halt.
-]
-
-{ #category : #'tests - find' }
 CTRegionQuadTreeTest >> testElementsWithinDoesNotFindAny [
 
 	| tree point point2 point3 point4 col |
@@ -157,6 +151,46 @@ CTRegionQuadTreeTest >> testEmptyTreeOfExtent [
 	tree := self quadTreeClass extent: 100 @ 100.
 	self assert: tree isLeaf.
 	self assert: tree bounds equals: (0 @ 0 corner: 100 @ 100)
+]
+
+{ #category : #'tests - find' }
+CTRegionQuadTreeTest >> testFindNodeInAreaOf [
+	
+	| tree node |
+	tree := CTRegionQuadTree fourPoints.
+	node := tree findNodeInAreaOf: 54@12.
+	self assert: tree topRightNode equals: node
+	
+]
+
+{ #category : #'tests - find' }
+CTRegionQuadTreeTest >> testFindNodeInAreaOfForNestedPoint [
+	
+	| tree node |
+	tree := CTRegionQuadTree fourPoints.
+	node := tree findNodeInAreaOf: 63@78.
+	self assert: tree bottomRightNode bottomLeftNode equals: node
+	
+]
+
+{ #category : #'tests - find' }
+CTRegionQuadTreeTest >> testFindNodeInAreaOfForNestedPoint2 [
+	
+	| tree node |
+	tree := CTRegionQuadTree eightPoints.
+	node := tree findNodeInAreaOf: 28@35.
+	self assert: tree topLeftNode bottomRightNode topLeftNode equals: node
+	
+]
+
+{ #category : #'tests - find' }
+CTRegionQuadTreeTest >> testFindNodeInAreaOfForTopLevel [
+	
+	| tree node |
+	tree := CTRegionQuadTree fourPoints.
+	node := tree findNodeInAreaOf: 54@12.
+	self assert: tree topRightNode equals: node
+	
 ]
 
 { #category : #tests }
@@ -226,7 +260,7 @@ CTRegionQuadTreeTest >> testQuadrantOfPointTopRight [
 
 { #category : #'tests - traversal ' }
 CTRegionQuadTreeTest >> testSevenTraversal [
-
+	" Pay attention Seven if the number of nodes, not the number of points since some nodes can be empty!"
 	| col tree |
 	tree := self quadTreeClass new.
 	{  CTQuadPoint x: 35 y: 42 object: 'Chicago'.
@@ -241,7 +275,7 @@ CTRegionQuadTreeTest >> testSevenTraversal [
 
 { #category : #'tests - traversal ' }
 CTRegionQuadTreeTest >> testSevenTraversalWithData [
-
+	" Pay attention Seven if the number of nodes, not the number of points since some nodes can be empty!"
 	| col tree |
 	tree := self quadTreeClass new.
 	{  CTQuadPoint x: 35 y: 42 object: 'Chicago'.
@@ -249,7 +283,7 @@ CTRegionQuadTreeTest >> testSevenTraversalWithData [
 	CTQuadPoint x: 62 y: 77 object: 'Toronto'.
 	CTQuadPoint x: 82 y: 65 object: 'Buffalo'}  do: [ :each | tree add: each ]. 
 	col := OrderedCollection new. 
-	tree do: [ :each | each hasData ifTrue: [ col add: each data point ]].
+	tree do: [ :each | each hasData ifTrue: [ col add: each data x @ each data y ]].
 		
 	self assert: col asArray equals: { 35@42 . 52@10 .  82@65 . 62@77 }
 ]

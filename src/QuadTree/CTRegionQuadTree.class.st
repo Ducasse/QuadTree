@@ -31,6 +31,24 @@ CTRegionQuadTree class >> bounds: aRectangle [
 	^ self new bounds: aRectangle ; yourself
 ]
 
+{ #category : #examples }
+CTRegionQuadTree class >> eightPoints [
+	<sampleInstance> 
+	
+	| tree |
+	tree := self new.
+	{  CTQuadPoint x: 35 y: 42 object: 'Chicago'.
+	CTQuadPoint x: 52 y: 10 object: 'Mobile'.
+	CTQuadPoint x: 62 y: 77 object: 'Toronto'.
+	CTQuadPoint x: 82 y: 65 object: 'Buffalo'.
+	CTQuadPoint x: 5 y: 45 object: 'Denver'.
+	CTQuadPoint x: 27 y: 35 object: 'Omana'.
+	CTQuadPoint x: 90 y: 5 object: 'Miami'.
+	CTQuadPoint x: 85 y: 15 object: 'Atlanta'
+	}  do: [ :each | tree add: each ].
+	^ tree
+]
+
 { #category : #'instance creation' }
 CTRegionQuadTree class >> extent: aPoint [ 
 	^ self new bounds: (0@0 corner: aPoint); yourself
@@ -174,6 +192,17 @@ CTRegionQuadTree >> elementsWithin: aRectangle [
 	 
 ]
 
+{ #category : #find }
+CTRegionQuadTree >> findNodeInAreaOf: aPoint [ 
+	"Return the node that contains the argument"
+	
+	| node |
+	node := (self quadrantOf: aPoint).
+	^ node isLeaf 	
+		ifFalse: [ node findNodeInAreaOf: aPoint ]
+		ifTrue: [ node ]
+]
+
 { #category : #testing }
 CTRegionQuadTree >> hasData [
 	^ data isNotNil
@@ -225,6 +254,7 @@ CTRegionQuadTree >> printOn: aStream [
 
 { #category : #private }
 CTRegionQuadTree >> quadrantOf: aPoint [
+	"Returns top level quadrant, not recurse of the receiver containing a point."
 	| center corner |
 	center := bounds center.
 	corner := bounds corner.
